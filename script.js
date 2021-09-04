@@ -1,5 +1,5 @@
-let icons
-
+let selections = [];
+let icons=[];
 
 gBoard();
 function loadIcons(){
@@ -21,14 +21,15 @@ function loadIcons(){
 
 function gBoard(){
     loadIcons();
+    selections = [];
     let board = document.getElementById('board');
-    let tiles = [];
-
+    let cards = [];
+    
     for (let i = 0; i < 18; i++){
-        tiles.push(`
-        <div class="board__tiles--static">
-        <div class="board--tile" id="tile${i}">
-            <div class="board__tile--back tile">
+        cards.push(`
+        <div class="board__tiles--static" onclick="selectTile(${i})">
+        <div class="board--tile" id="card${i}">
+            <div class="board__tile--back tile" id="back${i}">
              ${icons[0]}
 
             </div>
@@ -46,6 +47,39 @@ function gBoard(){
             icons.splice(0,1);
         }
     }
-    tiles.sort(()=>Math.random()-0.5);
-    board.innerHTML = tiles.join('');
+    cards.sort(()=>Math.random()-0.5);
+    board.innerHTML = cards.join(' ');
+}
+
+function selectTile(i){
+    let card = document.getElementById("card" + i);
+    if(card.style.transform != "rotateY(180deg"){
+        card.style.transform = "rotateY(180deg)"
+        selections.push(i)
+    }
+    if(selections.length == 2){
+        des(selections)
+        selections=[]
+    }
+
+}
+
+function des(selections){
+    setTimeout(()=> {
+        
+        let b1= document.getElementById("back" + selections[0]);
+        let b2= document.getElementById("back" + selections[1]);
+
+        if(b1.innerHTML != b2.innerHTML){
+            let t1 = document.getElementById("card" + selections[0]);
+            let t2 = document.getElementById("card" + selections[1]);
+            t1.style.transform = "rotateY(0deg)";
+            t2.style.transform = "rotateY(0deg)";
+        }else{
+            b1.style.background = "#FAF1E6";
+            b2.style.background = "#FAF1E6";
+
+        }
+    }, 1000);
+
 }
